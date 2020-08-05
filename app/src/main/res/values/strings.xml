@@ -1,0 +1,63 @@
+<resources>
+
+    <string name="app_name">Street Command</string>
+
+    <!-- Side nav Menu -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_desc">Navigation Header</string>
+    <string name="content_description">Content Description</string>
+
+    <string name="navigation_title">Street Command Beta</string>
+    <string name="navigation_subtitle">Version : %s</string>
+
+    <string name="menu_about">เกี่ยวกับ</string>
+    <string name="menu_help">ช่วยเหลือ</string>
+    <string name="menu_settings">ตั้งค่า</string>
+    <string name="menu_policy">นโยบายความเป็นส่วนตัว</string>
+    <string name="menu_logout">ออกจากระบบ</string>
+
+    <!-- Bottom Menu -->
+    <string name="menu_home">หน้าหลัก</string>
+    <string name="menu_camera">ถ่ายรูป</string>
+    <string name="menu_locations">จุดวางกำลัง</string>
+    <string name="menu_notifications">แจ้งเตือน</string>
+
+    <!-- Notification Menu -->
+    <string name="notification_empty_title">ไม่มีรายการแจ้งเตือน</string>
+    <string name="notification_empty_subtitle">ยังไม่มีรายการแจ้งเตือนในตอนนี้</string>
+
+    <!-- Home Menu -->
+    <string name="mock_id_string">User ID : 597001 (Mobile Officer)</string>
+    <string name="mock_name_string">จ.ส.อ. ทดสอบ ยอดเยี่ยม</string>
+
+    <string name="check_person_description">กรุณากรอกหมายเลขบัตรประชาชน 13 หลัก หรือ ชื่อ-นามสกุล หรือ เสียบเครื่องอ่านบัตรประชาชน</string>
+    <string name="cid_hint_string">กรอกเลขบัตรประชาชน 13 หลัก</string>
+    <string name="fullname_hint_string">กรุณากรอกชื่อ-นามสกุล</string>
+    <string name="check_button_title">ตรวจสอบ</string>
+
+    <string name="home_menu_check_person">ตรวจสอบบุคคล</string>
+    <string name="home_menu_check_alpr">ตรวจสอบยานพาหนะ</string>
+    <string name="home_menu_check_history">ประวัติการตรวจสอบ</string>
+
+    <string name="check_plate_description">กรุณากรอกหมายเลขป้ายทะเบียน และเลือกจังหวัด</string>
+    <string name="plate_hint_string">กรอกเลขทะเบียน</string>
+    <string name="select_province_hint">เลือกจังหวัด</string>
+
+    <!-- Camera -->
+    <string name="camera_request_rationale">Camera app requires camera access</string>
+
+    <!-- Locations -->
+    <string name="current_location">ตำแหน่งปัจจุบัน</string>
+    <string name="finding_location">กำลังค้นหาตำแหน่งปัจจุบัน</string>
+    <string name="location_not_found">ไม่สามารถค้นหาตำแหน่งปัจจุบันได้</string>
+
+    <string name="take_alpr_photo_button">ถ่ายรูป</string>
+    <string name="take_people_photo_button">ถ่ายรูป</string>
+
+    <string name="camera_people_description_string">ถ่ายรูปใบหน้าบุคคล\nโดยให้ใบหน้าอยู่ในกรอบที่กำหนด</string>
+    <string name="camera_alpr_description_string">ถ่ายรูปป้ายทะเบียนรถยนต์\nโดยให้ป้ายทะเบียนอยู่ในกรอบที่กำหนด</string>
+
+
+
+</resources>
