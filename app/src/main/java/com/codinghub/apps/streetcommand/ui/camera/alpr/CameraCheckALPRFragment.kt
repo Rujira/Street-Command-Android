@@ -48,17 +48,17 @@ class CameraCheckALPRFragment : Fragment() {
 
     private fun onFoundSuspect() {
         Snackbar.make(contentView, "พบประวัติ", Snackbar.LENGTH_LONG)
-            .setAnchorView(activity!!.nav_view_bottom)
-            .setBackgroundTint(ContextCompat.getColor(activity!!.applicationContext, R.color.dangerColor))
-            .setActionTextColor(ContextCompat.getColor(activity!!.applicationContext, R.color.whiteColor))
+            .setAnchorView(requireActivity().nav_view_bottom)
+            .setBackgroundTint(ContextCompat.getColor(requireActivity().applicationContext, R.color.dangerColor))
+            .setActionTextColor(ContextCompat.getColor(requireActivity().applicationContext, R.color.whiteColor))
             .show()
     }
 
     private fun onNotFoundSuspect() {
         Snackbar.make(contentView, "ไม่พบประวัติ", Snackbar.LENGTH_LONG)
-            .setAnchorView(activity!!.nav_view_bottom)
-            .setBackgroundTint(ContextCompat.getColor(activity!!.applicationContext, R.color.successColor))
-            .setActionTextColor(ContextCompat.getColor(activity!!.applicationContext, R.color.whiteColor))
+            .setAnchorView(requireActivity().nav_view_bottom)
+            .setBackgroundTint(ContextCompat.getColor(requireActivity().applicationContext, R.color.successColor))
+            .setActionTextColor(ContextCompat.getColor(requireActivity().applicationContext, R.color.whiteColor))
             .show()
     }
 

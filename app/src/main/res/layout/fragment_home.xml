@@ -163,19 +163,18 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp"
-                        android:text="ภาระกิจ"
+                        android:text="@string/work_descp_string"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/iconCardView"
                         app:layout_constraintTop_toTopOf="@+id/iconCardView" />
 
                     <TextView
-                        android:id="@+id/textView4"
+                        android:id="@+id/workDescriptionTextView"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp"
-                        android:text="ตรวจสอบบุคคลและยานพาหนะในพื้นที่"
                         app:layout_constraintBottom_toBottomOf="@+id/iconCardView"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/iconCardView"
@@ -244,7 +243,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp"
-                        android:text="พื้นที่รับผิดชอบ"
+                        android:text="@string/area_of_responsibility_string"
                         android:textAllCaps="true"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -252,12 +251,11 @@
                         app:layout_constraintTop_toTopOf="@+id/cardView" />
 
                     <TextView
-                        android:id="@+id/textView6"
+                        android:id="@+id/aorTextView"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp"
-                        android:text="บริเวณรอบตึกบัญชาการจนถึงประตูหน้า"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/cardView"
                         app:layout_constraintTop_toBottomOf="@+id/textView5" />

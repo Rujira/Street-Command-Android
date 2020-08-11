@@ -1,7 +1,9 @@
 package com.codinghub.apps.streetcommand.ui.main
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.StrictMode
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -10,12 +12,16 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.codinghub.apps.streetcommand.BuildConfig
 import com.codinghub.apps.streetcommand.R
 import com.codinghub.apps.streetcommand.ui.camera.CameraFragment
 import com.codinghub.apps.streetcommand.ui.home.HomeFragment
 import com.codinghub.apps.streetcommand.ui.location.LocationsFragment
+import com.codinghub.apps.streetcommand.ui.login.LoginActivity
 import com.codinghub.apps.streetcommand.ui.notification.NotificationsFragment
+import com.codinghub.apps.streetcommand.viewmodels.LoginViewModel
+import com.codinghub.apps.streetcommand.viewmodels.MainViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
@@ -23,6 +29,8 @@ import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.nav_header_main.view.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+
+    private lateinit var mainViewModel: MainViewModel
 
     private val TAG = MainActivity::class.qualifiedName
 
@@ -55,6 +63,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder().permitAll().build())
+
+        mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -107,7 +119,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
 
             R.id.nav_logout -> {
-
+                logout()
             }
         }
 
@@ -121,6 +133,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         nav_view.getHeaderView(0).headerTitleTextView.text = getString(R.string.navigation_title)
         nav_view.getHeaderView(0).headerSubTitleTextView.text =
             getString(R.string.navigation_subtitle, BuildConfig.VERSION_NAME)
+
+    }
+
+    fun logout() {
+
+        mainViewModel.removeAccessToken()
+        mainViewModel.saveLoginStatus(false)
+
+        val loginIntent = Intent(this, LoginActivity::class.java)
+        loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        applicationContext.startActivity(loginIntent)
 
     }
 }

@@ -7,6 +7,9 @@
     <color name="whiteColor">#FFFFFF</color>
     <color name="backgroundColor">#F4F5FA</color>
 
+    <color name="grayColor">#E0E0E0</color>
+    <color name="lightGrayColor">#ECEFF1</color>
+
     <color name="infoColor">#479FEB</color>
     <color name="infoColorSoft">#DFE7F5</color>
 

@@ -89,17 +89,17 @@ class LocationsFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun setupPlacesClient() {
-        Places.initialize(context!!, "Google-API-Key")
-        placesClient = Places.createClient(context!!)
+        Places.initialize(requireContext(), "Google-API-Key")
+        placesClient = Places.createClient(requireContext())
     }
 
     private fun setupLocationClient() {
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity!!)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
     }
 
     private fun requestLocationPermissions() {
-        ActivityCompat.requestPermissions(activity!!,
+        ActivityCompat.requestPermissions(requireActivity(),
             arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
             REQUEST_LOCATION
         )
@@ -107,7 +107,7 @@ class LocationsFragment : Fragment(), OnMapReadyCallback {
 
     private fun getCurrentLocation() {
 
-        if (ActivityCompat.checkSelfPermission(context!!, Manifest.permission.ACCESS_FINE_LOCATION) !=
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) !=
             PackageManager.PERMISSION_GRANTED) {
             requestLocationPermissions()
         } else {
@@ -138,7 +138,7 @@ class LocationsFragment : Fragment(), OnMapReadyCallback {
         val placeFields = listOf(Place.Field.NAME, Place.Field.ADDRESS)
         val request = FindCurrentPlaceRequest.newInstance(placeFields)
 
-        if (ActivityCompat.checkSelfPermission(context!!, Manifest.permission.ACCESS_FINE_LOCATION) !=
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) !=
             PackageManager.PERMISSION_GRANTED) {
             requestLocationPermissions()
         }
