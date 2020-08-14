@@ -44,10 +44,10 @@
     <string name="home_menu_check_history">ประวัติการตรวจสอบ</string>
 
     <string name="check_plate_description">กรุณากรอกหมายเลขป้ายทะเบียน และเลือกจังหวัด</string>
-    <string name="plate_hint_string">กรอกเลขทะเบียน</string>
-    <string name="select_province_hint">เลือกจังหวัด</string>
-
+    <string name="plate_hint_string">กรอกเลขทะเบียนรถ*</string>
+    <string name="select_province_hint">เลือกจังหวัด*</string>
     <string name="remark_hint">หมายเหตุ</string>
+    <string name="clear_button_title">ล้างข้อมูล</string>
 
     <!-- Camera -->
     <string name="camera_request_rationale">Camera app requires camera access</string>
@@ -69,6 +69,9 @@
     <string name="area_of_responsibility_string">พื้นที่รับผิดชอบ</string>
     <string name="no_work_descp_string">ไม่มีภาระกิจ</string>
     <string name="no_aor_string">ไม่มีพื้นที่รับผิดชอบ</string>
+    <string name="upload_image_hint">ภาพประกอบ</string>
+    <string name="camera_sheet_title">กล้องถ่ายรูป</string>
+    <string name="gallery_sheet_title">แกลเลอรี่ / อัลบัมรูป</string>
 
 
 </resources>

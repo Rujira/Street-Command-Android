@@ -1,6 +1,7 @@
 package com.codinghub.apps.streetcommand.ui.login
 
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -24,6 +25,7 @@ import com.codinghub.apps.streetcommand.models.login.LoginResponse
 import com.codinghub.apps.streetcommand.models.utilities.SafeClickListener
 import com.codinghub.apps.streetcommand.ui.main.MainActivity
 import com.codinghub.apps.streetcommand.viewmodels.LoginViewModel
+import dmax.dialog.SpotsDialog
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.nav_header_main.view.*
@@ -102,6 +104,15 @@ class LoginActivity : AppCompatActivity() {
 
         hideKeyboard()
 
+        val identifyDialog: AlertDialog? = SpotsDialog.Builder()
+            .setContext(this)
+            .setMessage("กำลังเข้าสู่ระบบ")
+            .setCancelable(false)
+            .build()
+            .apply {
+                show()
+            }
+
         loginViewModel.streetCommandLogin(username, password).observe(this, Observer<Either<LoginResponse>> { either ->
             if (either?.status == Status.SUCCESS && either.data != null) {
                 if (either.data.ret == 0) {
@@ -110,11 +121,14 @@ class LoginActivity : AppCompatActivity() {
                 } else {
                     Toast.makeText(this, either.data.msg, Toast.LENGTH_SHORT).show()
                 }
+
             } else {
                 if (either?.error == ApiError.LOGIN) {
-                    Toast.makeText(this, "Could not retrieve information. ", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้", Toast.LENGTH_SHORT).show()
                 }
+
             }
+            identifyDialog?.dismiss()
         })
     }
 

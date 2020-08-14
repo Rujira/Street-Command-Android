@@ -59,7 +59,6 @@ class LocationsFragment : Fragment(), OnMapReadyCallback {
         setupLocationClient()
         setupPlacesClient()
 
-
         return view
     }
 
@@ -89,7 +88,7 @@ class LocationsFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun setupPlacesClient() {
-        Places.initialize(requireContext(), "Google-API-Key")
+        Places.initialize(requireContext(), getString(R.string.google_maps_key))
         placesClient = Places.createClient(requireContext())
     }
 
@@ -122,7 +121,6 @@ class LocationsFragment : Fragment(), OnMapReadyCallback {
                     currentLatitude = location.latitude
                     currentLongitude = location.longitude
 
-                    //mMap.animateCamera(update)
                     mMap.moveCamera(update)
                     displayCurrentPlace()
 

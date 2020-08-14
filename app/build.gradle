@@ -85,4 +85,7 @@ dependencies {
     //Easy Permission
     implementation 'pub.devrel:easypermissions:3.0.0'
 
+    //Loading Dialog
+    implementation 'com.github.d-max:spots-dialog:1.1@aar'
+
 }

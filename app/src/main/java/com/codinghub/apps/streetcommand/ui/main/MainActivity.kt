@@ -12,6 +12,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import com.codinghub.apps.streetcommand.BuildConfig
 import com.codinghub.apps.streetcommand.R
@@ -56,7 +57,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun switchToFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.main_container, fragment).commit()
+        transaction.replace(R.id.main_container, fragment)
+            .addToBackStack(null)
+            .commit()
 
     }
 

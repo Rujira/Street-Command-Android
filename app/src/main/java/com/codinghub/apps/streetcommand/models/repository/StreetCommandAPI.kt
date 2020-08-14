@@ -1,6 +1,10 @@
 package com.codinghub.apps.streetcommand.models.repository
 
 
+import com.codinghub.apps.streetcommand.models.alpr.CheckALPRRequest
+import com.codinghub.apps.streetcommand.models.alpr.CheckALPRResponse
+import com.codinghub.apps.streetcommand.models.alpr.IdentifyALPRRequest
+import com.codinghub.apps.streetcommand.models.alpr.IdentifyALPRResponse
 import com.codinghub.apps.streetcommand.models.login.LoginRequest
 import com.codinghub.apps.streetcommand.models.login.LoginResponse
 import com.codinghub.apps.streetcommand.models.userinfo.User
@@ -16,5 +20,13 @@ interface StreetCommandAPI {
 
         @GET("user/information")
         fun getUserInfo(): Call<UserInfoResponse>
+
+        @Headers("Accept: application/json")
+        @POST("check/alpr")
+        fun checkVehicle(@Body body: CheckALPRRequest): Call<CheckALPRResponse>
+
+        @Headers("Accept: application/json")
+        @POST("identify/alpr")
+        fun identifyALPR(@Body body: IdentifyALPRRequest): Call<IdentifyALPRResponse>
 
 }

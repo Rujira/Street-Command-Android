@@ -13,9 +13,7 @@
         <item name="android:colorBackground">@color/whiteColor</item>
         <item name="colorOnBackground">#212121</item>
 
-
     </style>
-
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
