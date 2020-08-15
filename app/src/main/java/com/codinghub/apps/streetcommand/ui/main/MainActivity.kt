@@ -12,6 +12,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import com.codinghub.apps.streetcommand.BuildConfig
@@ -40,27 +41,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private val locationsFragment = LocationsFragment()
     private val notificationsFragment = NotificationsFragment()
 
-    private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        Log.d(TAG, "onNavigationItemSelectedListener")
-
-        val fragment = when (item.itemId) {
-            R.id.nav_home -> homeFragment
-            R.id.nav_camera -> cameraFragment
-            R.id.nav_locations -> locationsFragment
-            R.id.nav_notifications -> notificationsFragment
-            else -> HomeFragment()
-        }
-        switchToFragment(fragment)
-
-        true
-    }
-
-    private fun switchToFragment(fragment: Fragment) {
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.main_container, fragment)
-            .addToBackStack(null)
-            .commit()
-
+    internal enum class TabState {
+        HOME,
+        CAMERA,
+        LOCATION,
+        NOTIFICATION
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,8 +68,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         nav_view.setNavigationItemSelectedListener(this)
         nav_view_bottom.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
+        nav_view_bottom.menu.findItem(R.id.nav_home).isChecked = true
 
-        switchToFragment(homeFragment)
+        supportFragmentManager.beginTransaction()
+            .add(R.id.main_container, homeFragment)
+            .add(R.id.main_container, cameraFragment)
+            .add(R.id.main_container, locationsFragment)
+            .add(R.id.main_container, notificationsFragment)
+            .commit()
+        setTabStateFragment(TabState.HOME).commit()
+
 
         updateUI()
     }
@@ -95,10 +88,72 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onBackPressed() {
+
+        if (supportFragmentManager.backStackEntryCount > 0 || !homeFragment.isHidden) {
+            super.onBackPressed()
+        } else {
+            setTabStateFragment(TabState.HOME).commit()
+            nav_view_bottom.menu.findItem(R.id.nav_home).isChecked = true
+        }
+
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START)
         }
+    }
+
+    private fun setTabStateFragment(state: TabState): FragmentTransaction {
+        supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        val transaction = supportFragmentManager.beginTransaction()
+        when (state) {
+            TabState.HOME -> {
+                transaction.show(homeFragment)
+                transaction.hide(cameraFragment)
+                transaction.hide(locationsFragment)
+                transaction.hide(notificationsFragment)
+            }
+            TabState.CAMERA -> {
+                transaction.hide(homeFragment)
+                transaction.show(cameraFragment)
+                transaction.hide(locationsFragment)
+                transaction.hide(notificationsFragment)
+            }
+            TabState.LOCATION -> {
+                transaction.hide(homeFragment)
+                transaction.hide(cameraFragment)
+                transaction.show(locationsFragment)
+                transaction.hide(notificationsFragment)
+            }
+            TabState.NOTIFICATION -> {
+                transaction.hide(homeFragment)
+                transaction.hide(cameraFragment)
+                transaction.hide(locationsFragment)
+                transaction.show(notificationsFragment)
+            }
+        }
+        return transaction
+    }
+
+    private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
+        when (item.itemId) {
+            R.id.nav_home -> {
+                setTabStateFragment(TabState.HOME).commit()
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.nav_camera -> {
+                setTabStateFragment(TabState.CAMERA).commit()
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.nav_locations -> {
+                setTabStateFragment(TabState.LOCATION).commit()
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.nav_notifications -> {
+                setTabStateFragment(TabState.NOTIFICATION).commit()
+                return@OnNavigationItemSelectedListener true
+            }
+        }
+        false
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
