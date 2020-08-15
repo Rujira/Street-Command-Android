@@ -11,6 +11,8 @@ import com.codinghub.apps.streetcommand.models.alpr.CheckALPRResponse
 import com.codinghub.apps.streetcommand.models.error.Either
 import com.codinghub.apps.streetcommand.models.login.LoginRequest
 import com.codinghub.apps.streetcommand.models.login.LoginResponse
+import com.codinghub.apps.streetcommand.models.person.IdentifyPersonRequest
+import com.codinghub.apps.streetcommand.models.person.IdentifyPersonResponse
 import com.codinghub.apps.streetcommand.models.userinfo.UserInfoResponse
 
 interface Repository {
@@ -24,5 +26,6 @@ interface Repository {
 
     //Camera Check ALPR
     fun identifyALPR(request: IdentifyALPRRequest): LiveData<Either<IdentifyALPRResponse>>
+    fun identifyPerson(request: IdentifyPersonRequest): LiveData<Either<IdentifyPersonResponse>>
 
 }

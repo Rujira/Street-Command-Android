@@ -22,8 +22,6 @@ import com.codinghub.apps.streetcommand.models.error.ApiError
 import com.codinghub.apps.streetcommand.models.error.Either
 import com.codinghub.apps.streetcommand.models.error.Status
 import com.codinghub.apps.streetcommand.models.utilities.SafeClickListener
-import com.codinghub.apps.streetcommand.ui.camera.CameraFragment
-import com.codinghub.apps.streetcommand.ui.home.HomeFragment
 import com.codinghub.apps.streetcommand.ui.main.MainActivity
 import com.codinghub.apps.streetcommand.viewmodels.CameraViewModel
 import com.google.android.gms.common.api.ApiException
@@ -37,7 +35,6 @@ import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.material.snackbar.Snackbar
 import dmax.dialog.SpotsDialog
-import kotlinx.android.synthetic.main.activity_check_alpr.*
 import kotlinx.android.synthetic.main.activity_check_alpr.contentView
 import kotlinx.android.synthetic.main.activity_check_person.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -222,13 +219,15 @@ class CameraCheckALPRFragment : Fragment() {
 
     private fun onFoundSuspect(plate: String, province: String, message: String) {
         if (message.toLowerCase(Locale.getDefault()).contains("whitelist")) {
-            Snackbar.make(contentView,"พบในฐานข้อมูล - $plate $province $message", Snackbar.LENGTH_LONG)
+            Snackbar.make(contentView,"พบในฐานข้อมูล - $plate $province $message", 3000)
+                .setAnchorView(requireActivity().nav_view_bottom)
                 .setBackgroundTint(ContextCompat.getColor(requireContext().applicationContext, R.color.infoColor))
                 .setActionTextColor(ContextCompat.getColor(requireContext().applicationContext, R.color.whiteColor))
                 .show()
 
         } else {
-            Snackbar.make(contentView,"พบประวัติ - $plate $province $message", Snackbar.LENGTH_LONG)
+            Snackbar.make(contentView,"พบประวัติ - $plate $province $message", 3000)
+                .setAnchorView(requireActivity().nav_view_bottom)
                 .setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.dangerColor))
                 .setActionTextColor(ContextCompat.getColor(requireContext(), R.color.whiteColor))
                 .show()
@@ -244,7 +243,7 @@ class CameraCheckALPRFragment : Fragment() {
         } else {
             "$plate $province"
         }
-        Snackbar.make(contentView, "ไม่พบประวัติ - $message", Snackbar.LENGTH_LONG)
+        Snackbar.make(contentView, "ไม่พบประวัติ - $message", 3000)
             .setAnchorView(requireActivity().nav_view_bottom)
             .setBackgroundTint(ContextCompat.getColor(requireActivity().applicationContext, R.color.successColor))
             .setActionTextColor(ContextCompat.getColor(requireActivity().applicationContext, R.color.whiteColor))

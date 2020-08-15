@@ -113,8 +113,6 @@ class CameraFragment : Fragment() {
 
     private fun previewSession() {
 
-        requireActivity().nav_view_bottom.isEnabled = false
-
         val displayMetrics = DisplayMetrics()
 
         activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
@@ -137,7 +135,7 @@ class CameraFragment : Fragment() {
             object : CameraCaptureSession.StateCallback() {
                 override fun onConfigureFailed(session: CameraCaptureSession) {
                     Log.e(TAG, "create capture session failed!")
-                    requireActivity().nav_view_bottom.isEnabled = true
+
                 }
 
                 override fun onConfigured(session: CameraCaptureSession) {
@@ -146,13 +144,12 @@ class CameraFragment : Fragment() {
                         captureRequestBuilder.set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE)
                         captureSession.setRepeatingRequest(captureRequestBuilder.build(), null, null)
                     }
-                    requireActivity().nav_view_bottom.isEnabled = true
                 }
 
                 override fun onClosed(session: CameraCaptureSession) {
                     super.onClosed(session)
                     stopBackgroundThread()
-                    requireActivity().nav_view_bottom.isEnabled = true
+
                 }
             }, null)
     }

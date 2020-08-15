@@ -16,6 +16,7 @@
 
     <color name="successColor">#558B2F</color>
     <color name="dangerColor">#B71C1C</color>
+    <color name="warningColor">#FF8F00</color>
 
 
 </resources>

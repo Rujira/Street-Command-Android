@@ -19,6 +19,8 @@ import com.codinghub.apps.streetcommand.models.error.ApiError
 import com.codinghub.apps.streetcommand.models.error.Either
 import com.codinghub.apps.streetcommand.models.login.LoginRequest
 import com.codinghub.apps.streetcommand.models.login.LoginResponse
+import com.codinghub.apps.streetcommand.models.person.IdentifyPersonRequest
+import com.codinghub.apps.streetcommand.models.person.IdentifyPersonResponse
 import com.codinghub.apps.streetcommand.models.userinfo.UserInfoResponse
 import retrofit2.Call
 import retrofit2.Callback
@@ -102,6 +104,25 @@ object RemoteRepository : Repository {
             }
             override fun onFailure(call: Call<IdentifyALPRResponse>, t: Throwable) {
                 liveData.value = Either.error(ApiError.IDENTIFYALPR, null)
+            }
+        })
+        return liveData
+    }
+
+    override fun identifyPerson(request: IdentifyPersonRequest): LiveData<Either<IdentifyPersonResponse>> {
+
+        val liveData = MutableLiveData<Either<IdentifyPersonResponse>>()
+        genericAPI.identifyPerson(request).enqueue(object : Callback<IdentifyPersonResponse> {
+
+            override fun onResponse(call: Call<IdentifyPersonResponse>, response: Response<IdentifyPersonResponse>) {
+                if (response.isSuccessful) {
+                    liveData.value = Either.success(response.body())
+                } else {
+                    liveData.value = Either.error(ApiError.IDENTIFYPERSON, null)
+                }
+            }
+            override fun onFailure(call: Call<IdentifyPersonResponse>, t: Throwable) {
+                liveData.value = Either.error(ApiError.IDENTIFYPERSON, null)
             }
         })
         return liveData

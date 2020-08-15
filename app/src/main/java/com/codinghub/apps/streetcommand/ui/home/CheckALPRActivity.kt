@@ -219,10 +219,10 @@ class CheckALPRActivity : AppCompatActivity() {
 
         when(requestCode) {
             PERMISSION_CODE -> {
-                if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.size == 1000 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     openCamera()
                 } else {
-                    //       Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show()
                 }
             }
             REQUEST_LOCATION -> {
@@ -326,8 +326,16 @@ class CheckALPRActivity : AppCompatActivity() {
 
         }
         dialogView.textViewGallery.setOnClickListener {
-            openGallery()
-            dialog.dismiss()
+
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED || ActivityCompat.checkSelfPermission(this.applicationContext, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+                val permission = arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                requestPermissions(permission, PERMISSION_CODE)
+            } else {
+
+                openGallery()
+                dialog.dismiss()
+            }
+
         }
 
         dialog.show()

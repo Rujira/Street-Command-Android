@@ -7,6 +7,8 @@ import com.codinghub.apps.streetcommand.models.alpr.IdentifyALPRRequest
 import com.codinghub.apps.streetcommand.models.alpr.IdentifyALPRResponse
 import com.codinghub.apps.streetcommand.models.login.LoginRequest
 import com.codinghub.apps.streetcommand.models.login.LoginResponse
+import com.codinghub.apps.streetcommand.models.person.IdentifyPersonRequest
+import com.codinghub.apps.streetcommand.models.person.IdentifyPersonResponse
 import com.codinghub.apps.streetcommand.models.userinfo.User
 import com.codinghub.apps.streetcommand.models.userinfo.UserInfoResponse
 import retrofit2.Call
@@ -28,5 +30,9 @@ interface StreetCommandAPI {
         @Headers("Accept: application/json")
         @POST("identify/alpr")
         fun identifyALPR(@Body body: IdentifyALPRRequest): Call<IdentifyALPRResponse>
+
+        @Headers("Accept: application/json")
+        @POST("identify/person")
+        fun identifyPerson(@Body body: IdentifyPersonRequest): Call<IdentifyPersonResponse>
 
 }

@@ -4,5 +4,6 @@ enum class ApiError {
     LOGIN,
     USERINFO,
     CHECKALPR,
-    IDENTIFYALPR
+    IDENTIFYALPR,
+    IDENTIFYPERSON
 }

@@ -72,6 +72,7 @@
     <string name="upload_image_hint">ภาพประกอบ</string>
     <string name="camera_sheet_title">กล้องถ่ายรูป</string>
     <string name="gallery_sheet_title">แกลเลอรี่ / อัลบัมรูป</string>
+    <string name="cid_switch_title">แสดงรูปจากเครื่องอ่านบัตร</string>
 
 
 </resources>
