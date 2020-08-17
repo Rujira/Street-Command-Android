@@ -7,11 +7,14 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -37,12 +40,15 @@ import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
 import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.material.snackbar.Snackbar
+import com.squareup.picasso.Picasso
 import dmax.dialog.SpotsDialog
 import kotlinx.android.synthetic.main.activity_check_alpr.*
 import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.fragment_camera.*
 import kotlinx.android.synthetic.main.fragment_camera_check_person.view.*
 import java.io.ByteArrayOutputStream
+import java.math.RoundingMode
+import java.text.DecimalFormat
 import java.util.*
 
 class CameraCheckPersonFragment : Fragment() {
@@ -231,7 +237,7 @@ class CameraCheckPersonFragment : Fragment() {
     }
 
     private fun onNotFoundSuspect(person: Person) {
-        Snackbar.make(contentView, "ไม่พบประวัติ - ${person.person_type}", 3000)
+        Snackbar.make(contentView, "ไม่พบประวัติ - ${person.person_type}", cameraViewModel.getSnackbarsDuration())
             .setAnchorView(requireActivity().nav_view_bottom)
             .setBackgroundTint(ContextCompat.getColor(requireActivity().applicationContext, R.color.successColor))
             .setActionTextColor(ContextCompat.getColor(requireActivity().applicationContext, R.color.whiteColor))
@@ -239,7 +245,7 @@ class CameraCheckPersonFragment : Fragment() {
     }
 
     private fun onFaceNotFound() {
-        Snackbar.make(contentView, "ไม่พบใบหน้า", 3000)
+        Snackbar.make(contentView, "ไม่พบใบหน้า",  cameraViewModel.getSnackbarsDuration())
             .setAnchorView(requireActivity().nav_view_bottom)
             .setBackgroundTint(ContextCompat.getColor(requireActivity().applicationContext, R.color.warningColor))
             .setActionTextColor(ContextCompat.getColor(requireActivity().applicationContext, R.color.whiteColor))
@@ -247,7 +253,10 @@ class CameraCheckPersonFragment : Fragment() {
     }
 
     private fun onFoundWhitelist(person: Person) {
-        Snackbar.make(contentView,"พบในฐานข้อมูล - ${person.person_type}", 3000)
+        Snackbar.make(contentView,"พบในฐานข้อมูล - ${person.person_type}",  cameraViewModel.getSnackbarsDuration())
+            .setAction("เพิ่มเติม") {
+                showMoreDialog(person)
+            }
             .setAnchorView(requireActivity().nav_view_bottom)
             .setBackgroundTint(ContextCompat.getColor(requireContext().applicationContext, R.color.infoColor))
             .setActionTextColor(ContextCompat.getColor(requireContext().applicationContext, R.color.whiteColor))
@@ -255,11 +264,47 @@ class CameraCheckPersonFragment : Fragment() {
     }
 
     private fun onFoundBlacklist(person: Person) {
-        Snackbar.make(contentView, "พบประวัติ - ${person.person_type}", 3000)
+        Snackbar.make(contentView, "พบประวัติ - ${person.person_type}",  cameraViewModel.getSnackbarsDuration())
+            .setAction("เพิ่มเติม") {
+                showMoreDialog(person)
+            }
             .setAnchorView(requireActivity().nav_view_bottom)
             .setBackgroundTint(ContextCompat.getColor(requireActivity().applicationContext, R.color.dangerColor))
             .setActionTextColor(ContextCompat.getColor(requireActivity().applicationContext, R.color.whiteColor))
             .show()
+    }
+
+    private fun showMoreDialog(person: Person) {
+
+        val dialogBuilder = AlertDialog.Builder(activity)
+        val dialogView = this.layoutInflater.inflate(R.layout.dialog_person, null)
+        dialogBuilder.setView(dialogView)
+
+        dialogBuilder.setTitle(person.person_type)
+
+        val percentEditText = dialogView.findViewById<TextView>(R.id.percentEditText)
+        val personNameEditText = dialogView.findViewById<TextView>(R.id.personNameEditText)
+        val personIDEditText = dialogView.findViewById<TextView>(R.id.personIDEditText)
+        val personImageView1 = dialogView.findViewById<ImageView>(R.id.personImageView1)
+        val personImageView2 = dialogView.findViewById<ImageView>(R.id.personImageView2)
+
+        val df = DecimalFormat("##.##")
+        df.roundingMode = RoundingMode.CEILING
+
+        percentEditText.text =  Editable.Factory.getInstance().newEditable(getString(R.string.similarity_string, df.format(person.similarity)))
+        personNameEditText.text =  Editable.Factory.getInstance().newEditable(getString(R.string.person_fullname_string, person.fullname))
+        personIDEditText.text = Editable.Factory.getInstance().newEditable(getString(R.string.cid_string, person.citizen_id))
+
+        Picasso.get().load(person.image_search).into(personImageView1)
+        Picasso.get().load(person.image_match).into(personImageView2)
+
+        dialogBuilder.setNegativeButton("ปิด") { _, _->
+            //pass
+        }
+
+        val dialog = dialogBuilder.create()
+        dialog.show()
+
     }
 
 }

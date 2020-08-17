@@ -3,6 +3,11 @@
     <string name="app_name">Street Command</string>
     <string name="app_version">App Version : %s - Build : %d</string>
 
+    <!-- Login -->
+    <string name="username_hint">Username</string>
+    <string name="password_hint">Password</string>
+    <string name="login_button">Login</string>
+
     <!-- Side nav Menu -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -34,6 +39,11 @@
 
     <string name="user_id_string">User : %s - (%s)</string>>
 
+    <string name="work_descp_string">ภาระกิจ</string>
+    <string name="area_of_responsibility_string">พื้นที่รับผิดชอบ</string>
+    <string name="no_work_descp_string">ไม่มีภาระกิจ</string>
+    <string name="no_aor_string">ไม่มีพื้นที่รับผิดชอบ</string>
+
     <string name="check_person_description">กรุณากรอกหมายเลขบัตรประชาชน 13 หลัก หรือ ชื่อ-นามสกุล หรือ เสียบเครื่องอ่านบัตรประชาชน</string>
     <string name="cid_hint_string">กรอกเลขบัตรประชาชน 13 หลัก</string>
     <string name="fullname_hint_string">กรุณากรอกชื่อ-นามสกุล</string>
@@ -49,30 +59,32 @@
     <string name="remark_hint">หมายเหตุ</string>
     <string name="clear_button_title">ล้างข้อมูล</string>
 
+    <string name="upload_image_hint">ภาพประกอบ</string>
+    <string name="camera_sheet_title">กล้องถ่ายรูป</string>
+    <string name="gallery_sheet_title">แกลเลอรี่ / อัลบัมรูป</string>
+    <string name="cid_switch_title">แสดงรูปจากเครื่องอ่านบัตร</string>
+
     <!-- Camera -->
     <string name="camera_request_rationale">Camera app requires camera access</string>
+    <string name="camera_people_description_string">ถ่ายรูปใบหน้าบุคคล\nโดยให้ใบหน้าอยู่ในกรอบที่กำหนด</string>
+    <string name="camera_alpr_description_string">ถ่ายรูปป้ายทะเบียนรถยนต์\nโดยให้ป้ายทะเบียนอยู่ในกรอบที่กำหนด</string>
+    <string name="take_alpr_photo_button">ถ่ายรูป</string>
+    <string name="take_people_photo_button">ถ่ายรูป</string>
+
+    <string name="on_database_image">ภาพในฐานข้อมูล</string>
+    <string name="snap_image">ภาพถ่าย</string>
+
+    <string name="similarity_string">ความคล้ายคลึง : %s %%</string>
+    <string name="person_fullname_string">ชื่อ-สกุล : %s</string>
+    <string name="cid_string">CID : %s</string>
 
     <!-- Locations -->
     <string name="current_location">ตำแหน่งปัจจุบัน</string>
     <string name="finding_location">กำลังค้นหาตำแหน่งปัจจุบัน</string>
     <string name="location_not_found">ไม่สามารถค้นหาตำแหน่งปัจจุบันได้</string>
-
-    <string name="take_alpr_photo_button">ถ่ายรูป</string>
-    <string name="take_people_photo_button">ถ่ายรูป</string>
-
-    <string name="camera_people_description_string">ถ่ายรูปใบหน้าบุคคล\nโดยให้ใบหน้าอยู่ในกรอบที่กำหนด</string>
-    <string name="camera_alpr_description_string">ถ่ายรูปป้ายทะเบียนรถยนต์\nโดยให้ป้ายทะเบียนอยู่ในกรอบที่กำหนด</string>
-    <string name="username_hint">Username</string>
-    <string name="password_hint">Password</string>
-    <string name="login_button">Login</string>
-    <string name="work_descp_string">ภาระกิจ</string>
-    <string name="area_of_responsibility_string">พื้นที่รับผิดชอบ</string>
-    <string name="no_work_descp_string">ไม่มีภาระกิจ</string>
-    <string name="no_aor_string">ไม่มีพื้นที่รับผิดชอบ</string>
-    <string name="upload_image_hint">ภาพประกอบ</string>
-    <string name="camera_sheet_title">กล้องถ่ายรูป</string>
-    <string name="gallery_sheet_title">แกลเลอรี่ / อัลบัมรูป</string>
-    <string name="cid_switch_title">แสดงรูปจากเครื่องอ่านบัตร</string>
+    <string name="camera_other_description">ถ่ายรูปวัตถุ บุคคล หรือสถานที่ต้องสงสัย</string>
+    <string name="other_take_photo">ถ่ายรูป</string>
+    <string name="other_string_hint">เลือกหมวดหมู่</string>
 
 
 </resources>

@@ -10,12 +10,6 @@ import com.codinghub.apps.streetcommand.models.userinfo.UserInfoResponse
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val repository = Injection.provideRepository()
-
-    fun getUserInfo(): LiveData<Either<UserInfoResponse>> {
-        return repository.getUserInfo()
-    }
-
     fun saveLoginStatus(isUserLoggedIn: Boolean) {
         return AppPreferences.saveLoginStatus(isUserLoggedIn)
     }

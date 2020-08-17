@@ -39,4 +39,11 @@
         <item name="android:colorControlActivated">@color/colorPrimary</item>
     </style>
 
+    <style name="OtherDropDown" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="boxStrokeColor">@color/whiteColor</item>
+        <item name="boxStrokeWidth">2dp</item>
+        <item name="hintTextColor">@color/whiteColor</item>
+        <item name="android:colorControlActivated">@color/whiteColor</item>
+    </style>
+
 </resources>

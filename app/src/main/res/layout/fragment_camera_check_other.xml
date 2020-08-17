@@ -1,8 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/otherContentView"
     tools:context=".ui.camera.other.CameraCheckOtherFragment">
 
-</FrameLayout>
+    <com.codinghub.apps.streetcommand.camerautil.OtherViewPort
+        android:id="@+id/otherViewport"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#3F000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </com.codinghub.apps.streetcommand.camerautil.OtherViewPort>
+
+    <TextView
+        android:id="@+id/otherTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/camera_other_description"
+        android:textAlignment="center"
+        android:textColor="@color/whiteColor"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/otherTextInputLayout"
+        style="@style/OtherDropDown"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:hint="@string/other_string_hint"
+        android:textColorHint="@color/whiteColor"
+        app:boxStrokeErrorColor="@color/whiteColor"
+        app:counterTextColor="@color/whiteColor"
+        app:helperTextTextColor="@color/whiteColor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/otherTextView"
+        app:placeholderTextColor="@color/whiteColor"
+        app:prefixTextColor="@color/whiteColor"
+        app:suffixTextColor="@color/whiteColor">
+
+        <AutoCompleteTextView
+            android:id="@+id/otherDropdown"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/whiteColor"
+            android:inputType="none"/>
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/takeOtherPhotoButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="56dp"
+        android:text="@string/other_take_photo"
+        app:layout_constraintBottom_toBottomOf="@+id/otherViewport"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

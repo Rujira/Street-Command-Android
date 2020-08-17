@@ -11,6 +11,10 @@ import com.codinghub.apps.streetcommand.models.alpr.CheckALPRResponse
 import com.codinghub.apps.streetcommand.models.error.Either
 import com.codinghub.apps.streetcommand.models.login.LoginRequest
 import com.codinghub.apps.streetcommand.models.login.LoginResponse
+import com.codinghub.apps.streetcommand.models.other.IdentifyOtherRequest
+import com.codinghub.apps.streetcommand.models.other.IdentifyOtherResponse
+import com.codinghub.apps.streetcommand.models.person.CheckPersonRequest
+import com.codinghub.apps.streetcommand.models.person.CheckPersonResponse
 import com.codinghub.apps.streetcommand.models.person.IdentifyPersonRequest
 import com.codinghub.apps.streetcommand.models.person.IdentifyPersonResponse
 import com.codinghub.apps.streetcommand.models.userinfo.UserInfoResponse
@@ -22,10 +26,12 @@ interface Repository {
 
     //Check Vehicle
     fun checkVehicle(request: CheckALPRRequest): LiveData<Either<CheckALPRResponse>>
+    fun checkPerson(request: CheckPersonRequest): LiveData<Either<CheckPersonResponse>>
     fun modifyOrientation(activity: Activity, bitmap: Bitmap, uri: Uri): Bitmap
 
     //Camera Check ALPR
     fun identifyALPR(request: IdentifyALPRRequest): LiveData<Either<IdentifyALPRResponse>>
     fun identifyPerson(request: IdentifyPersonRequest): LiveData<Either<IdentifyPersonResponse>>
+    fun identifyEnvironment(request: IdentifyOtherRequest): LiveData<Either<IdentifyOtherResponse>>
 
 }

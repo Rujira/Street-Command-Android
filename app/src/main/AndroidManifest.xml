@@ -45,6 +45,7 @@
             android:name=".ui.settings.SettingsActivity"
             android:screenOrientation="userPortrait" />
         <activity
+            android:noHistory="true"
             android:name=".ui.login.LoginActivity"
             android:screenOrientation="userPortrait"
             android:theme="@style/AppTheme.NoActionBar">

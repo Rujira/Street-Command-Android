@@ -46,6 +46,7 @@
             android:layout_height="wrap_content"
             android:inputType="number"
             android:maxLines="1"
+            android:maxLength="13"
             android:id="@+id/cidTextView" android:focusable="true"
             android:longClickable="false"/>
 

@@ -23,12 +23,18 @@ import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
-import com.codinghub.apps.streetcommand.BuildConfig
+import androidx.lifecycle.Observer
 import com.codinghub.apps.streetcommand.R
+import com.codinghub.apps.streetcommand.models.error.ApiError
+import com.codinghub.apps.streetcommand.models.error.Either
+import com.codinghub.apps.streetcommand.models.error.Status
+import com.codinghub.apps.streetcommand.models.person.CheckPersonResponse
+import com.codinghub.apps.streetcommand.models.person.Person
 import com.codinghub.apps.streetcommand.models.thcard.SmartCardDevice
 import com.codinghub.apps.streetcommand.models.thcard.ThaiSmartCard
 import com.codinghub.apps.streetcommand.models.utilities.SafeClickListener
@@ -43,12 +49,17 @@ import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
 import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.material.snackbar.Snackbar
+import com.squareup.picasso.Picasso
+import dmax.dialog.SpotsDialog
 import kotlinx.android.synthetic.main.activity_check_alpr.*
 import kotlinx.android.synthetic.main.activity_check_person.*
 import kotlinx.android.synthetic.main.activity_check_person.contentView
 import kotlinx.android.synthetic.main.bottom_sheet.view.*
+import kotlinx.android.synthetic.main.content_main.*
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
+import java.math.RoundingMode
+import java.text.DecimalFormat
 import java.util.*
 
 class CheckPersonActivity : AppCompatActivity() {
@@ -68,6 +79,8 @@ class CheckPersonActivity : AppCompatActivity() {
     var exifData: Uri? = null
     internal lateinit var snapImage: Bitmap
 
+    private var search_type : Int = 0
+
     private val PERMISSION_CODE = 1000
     private val IMAGE_CAPTURE_CODE = 1001
     private val IMAGE_GALLERY_CODE = 1002
@@ -86,6 +99,8 @@ class CheckPersonActivity : AppCompatActivity() {
     private lateinit var receiver: BroadcastReceiver
 
     private var usbDeviceIsAttached = false
+
+    private var isCIDCountComplete = false
 
     companion object {
         private const val REQUEST_LOCATION = 1
@@ -121,7 +136,10 @@ class CheckPersonActivity : AppCompatActivity() {
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                isCIDCountComplete = s?.count() == 13
+
+            }
         })
 
         fullNameTextView.addTextChangedListener(object : TextWatcher {
@@ -173,7 +191,7 @@ class CheckPersonActivity : AppCompatActivity() {
 
     private fun updateUI() {
 
-        if(cidTextView.text!!.isNotEmpty() || fullNameTextView.text!!.isNotEmpty()) {
+        if(isCIDCountComplete && fullNameTextView.text!!.isNotEmpty()) {
             enableCheckButton()
         } else {
             disableCheckButton()
@@ -196,19 +214,12 @@ class CheckPersonActivity : AppCompatActivity() {
         updateUI()
     }
 
-//    private fun resetTextView() {
-//        cidTextView.setText("")
-//        fullNameTextView.setText("")
-//        updateUI()
-//    }
-
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
 
         when(requestCode) {
             PERMISSION_CODE -> {
@@ -383,7 +394,6 @@ class CheckPersonActivity : AppCompatActivity() {
             remarkPersonImage.setImageBitmap(checkPersonViewModel.modifyOrientation(this ,snapImage, exifData!!))
 
         }
-
     }
 
     private fun getImageBase64(image: ImageView): String {
@@ -423,28 +433,134 @@ class CheckPersonActivity : AppCompatActivity() {
 
         hideKeyboard()
 
-//        if (cidTextView.text.toString() == testCID || fullNameTextView.text.toString() == testFullName) {
-//            onFoundSuspect()
-//        } else {
-//            onNotFoundSuspect()
-//        }
+        val identifyDialog: AlertDialog? = SpotsDialog.Builder()
+            .setContext(this)
+            .setMessage("กำลังตรวจสอบ")
+            .setCancelable(false)
+            .build()
+            .apply {
+                show()
+            }
+
+        val citizen_id = cidTextView.text.toString()
+        val fullname = fullNameTextView.text.toString()
+        val latitude = currentLatitude
+        val longitude = currentLongitude
+        val address = currentAddress
+        val remark = remarkPersonTextView.text.toString()
+        val image = if (isTakePhoto) { getImageBase64(remarkPersonImage) } else { "" }
+        val search_type = search_type
+
+        checkPersonViewModel.checkPerson(
+            citizen_id,
+            fullname,
+            latitude,
+            longitude,
+            address,
+            remark,
+            image,
+            search_type).observe(this, Observer<Either<CheckPersonResponse>> { either ->
+
+            if (either?.status == Status.SUCCESS && either.data != null) {
+                if (either.data.ret == 0) {
+
+                    val personType = either.data.person.person_type.toLowerCase(Locale.getDefault())
+
+                    when {
+                        personType.contains("whitelist") && personType.contains("civilian") -> {
+                            onNotFoundSuspect(either.data.person)
+                        }
+                        personType.contains("whitelist") -> {
+                            onFoundWhitelist(either.data.person)
+                        }
+                        personType.contains("blacklist") -> {
+                            onFoundBlacklist(either.data.person)
+                        }
+                        else -> {
+
+                        }
+                    }
+
+
+                } else if (either.data.ret == -3) {
+                    Toast.makeText(this, "มีผู้ใช้งานอื่นใช้บัญชีนี้", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+                else {
+                    Toast.makeText(this, either.data.msg, Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                if (either?.error == ApiError.CHECKALPR) {
+                    Toast.makeText(this, "ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้", Toast.LENGTH_SHORT).show()
+                }
+            }
+            identifyDialog?.dismiss()
+        })
+
+
     }
 
-    private fun onFoundSuspect() {
-        Snackbar.make(contentView, "พบประวัติ", Snackbar.LENGTH_LONG)
+    private fun onNotFoundSuspect(person: Person) {
+        Snackbar.make(contentView, "ไม่พบประวัติ - ${person.person_type}", checkPersonViewModel.getSnackbarsDuration())
+            .setBackgroundTint(ContextCompat.getColor(applicationContext, R.color.successColor))
+            .setActionTextColor(ContextCompat.getColor(applicationContext, R.color.whiteColor))
+            .show()
+    }
 
+
+    private fun onFoundWhitelist(person: Person) {
+        Snackbar.make(contentView,"พบในฐานข้อมูล - ${person.person_type}",  checkPersonViewModel.getSnackbarsDuration())
+            .setAction("เพิ่มเติม") {
+                showMoreDialog(person)
+            }
+            .setBackgroundTint(ContextCompat.getColor(applicationContext, R.color.infoColor))
+            .setActionTextColor(ContextCompat.getColor(applicationContext, R.color.whiteColor))
+            .show()
+    }
+
+    private fun onFoundBlacklist(person: Person) {
+        Snackbar.make(contentView, "พบประวัติ - ${person.person_type}",  checkPersonViewModel.getSnackbarsDuration())
+            .setAction("เพิ่มเติม") {
+                showMoreDialog(person)
+            }
             .setBackgroundTint(ContextCompat.getColor(applicationContext, R.color.dangerColor))
             .setActionTextColor(ContextCompat.getColor(applicationContext, R.color.whiteColor))
             .show()
     }
 
-    private fun onNotFoundSuspect() {
-        Snackbar.make(contentView, "ไม่พบประวัติ", Snackbar.LENGTH_LONG)
+    private fun showMoreDialog(person: Person) {
 
-            .setBackgroundTint(ContextCompat.getColor(applicationContext, R.color.successColor))
-            .setActionTextColor(ContextCompat.getColor(applicationContext, R.color.whiteColor))
-            .show()
+        val dialogBuilder = AlertDialog.Builder(this)
+        val dialogView = this.layoutInflater.inflate(R.layout.dialog_person, null)
+        dialogBuilder.setView(dialogView)
+
+        dialogBuilder.setTitle(person.person_type)
+
+        val percentEditText = dialogView.findViewById<TextView>(R.id.percentEditText)
+        val personNameEditText = dialogView.findViewById<TextView>(R.id.personNameEditText)
+        val personIDEditText = dialogView.findViewById<TextView>(R.id.personIDEditText)
+        val personImageView1 = dialogView.findViewById<ImageView>(R.id.personImageView1)
+        val personImageView2 = dialogView.findViewById<ImageView>(R.id.personImageView2)
+
+        val df = DecimalFormat("##.##")
+        df.roundingMode = RoundingMode.CEILING
+
+        percentEditText.text =  Editable.Factory.getInstance().newEditable(getString(R.string.similarity_string, df.format(person.similarity)))
+        personNameEditText.text =  Editable.Factory.getInstance().newEditable(getString(R.string.person_fullname_string, person.fullname))
+        personIDEditText.text = Editable.Factory.getInstance().newEditable(getString(R.string.cid_string, person.citizen_id))
+
+        Picasso.get().load(person.image_search).into(personImageView1)
+        Picasso.get().load(person.image_match).into(personImageView2)
+
+        dialogBuilder.setNegativeButton("ปิด") { _, _->
+            //pass
+        }
+
+        val dialog = dialogBuilder.create()
+        dialog.show()
+
     }
+
 
     //Card Reader
 
@@ -549,6 +665,8 @@ class CheckPersonActivity : AppCompatActivity() {
                         personID = info.PersonalID
                         personName = info.NameTH
 
+                        search_type = 1
+
                         setTextView(personID, personName)
 
                         if (readImageSwitch.isChecked) {
@@ -605,6 +723,7 @@ class CheckPersonActivity : AppCompatActivity() {
         cidTextView.setText("")
         fullNameTextView.setText("")
         remarkPersonTextView.setText("")
+        search_type = 0
 
     }
 

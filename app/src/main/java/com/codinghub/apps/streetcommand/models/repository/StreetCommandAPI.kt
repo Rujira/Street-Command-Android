@@ -7,6 +7,10 @@ import com.codinghub.apps.streetcommand.models.alpr.IdentifyALPRRequest
 import com.codinghub.apps.streetcommand.models.alpr.IdentifyALPRResponse
 import com.codinghub.apps.streetcommand.models.login.LoginRequest
 import com.codinghub.apps.streetcommand.models.login.LoginResponse
+import com.codinghub.apps.streetcommand.models.other.IdentifyOtherRequest
+import com.codinghub.apps.streetcommand.models.other.IdentifyOtherResponse
+import com.codinghub.apps.streetcommand.models.person.CheckPersonRequest
+import com.codinghub.apps.streetcommand.models.person.CheckPersonResponse
 import com.codinghub.apps.streetcommand.models.person.IdentifyPersonRequest
 import com.codinghub.apps.streetcommand.models.person.IdentifyPersonResponse
 import com.codinghub.apps.streetcommand.models.userinfo.User
@@ -28,11 +32,19 @@ interface StreetCommandAPI {
         fun checkVehicle(@Body body: CheckALPRRequest): Call<CheckALPRResponse>
 
         @Headers("Accept: application/json")
+        @POST("check/person")
+        fun checkPerson(@Body body: CheckPersonRequest): Call<CheckPersonResponse>
+
+        @Headers("Accept: application/json")
         @POST("identify/alpr")
         fun identifyALPR(@Body body: IdentifyALPRRequest): Call<IdentifyALPRResponse>
 
         @Headers("Accept: application/json")
         @POST("identify/person")
         fun identifyPerson(@Body body: IdentifyPersonRequest): Call<IdentifyPersonResponse>
+
+        @Headers("Accept: application/json")
+        @POST("identify/environment")
+        fun identifyEnvironment(@Body body: IdentifyOtherRequest): Call<IdentifyOtherResponse>
 
 }

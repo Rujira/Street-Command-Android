@@ -2,9 +2,7 @@ package com.codinghub.apps.streetcommand.ui.camera
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.content.Context
-import android.content.pm.PackageManager
 import android.graphics.SurfaceTexture
 import android.hardware.camera2.*
 import android.os.Bundle
@@ -14,24 +12,12 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
-import android.widget.Button
-import androidx.core.app.ActivityCompat
 import androidx.viewpager.widget.ViewPager
 import com.codinghub.apps.streetcommand.R
 import com.codinghub.apps.streetcommand.ui.camera.alpr.CameraCheckALPRFragment
+import com.codinghub.apps.streetcommand.ui.camera.other.CameraCheckOtherFragment
 import com.codinghub.apps.streetcommand.ui.camera.person.CameraCheckPersonFragment
-import com.codinghub.apps.streetcommand.ui.home.CheckALPRActivity
-import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.tasks.Task
-import com.google.android.libraries.places.api.Places
-import com.google.android.libraries.places.api.model.Place
-import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
-import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse
-import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.material.tabs.TabLayout
-import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.fragment_camera.*
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
@@ -51,15 +37,13 @@ class CameraFragment : Fragment() {
 
         override fun onOpened(camera: CameraDevice) {
             Log.d(TAG, "camera device opened")
-            if (camera != null) {
-                cameraDevice = camera
-                previewSession()
-            }
+            cameraDevice = camera
+            previewSession()
         }
 
         override fun onDisconnected(camera: CameraDevice) {
             Log.d(TAG, "camera device disconnected")
-            camera?.close()
+            camera.close()
         }
 
         override fun onError(camera: CameraDevice, p1: Int) {
@@ -98,11 +82,13 @@ class CameraFragment : Fragment() {
         view?.let {
             cameraViewPager = it.findViewById(R.id.cameraViewPager)
             cameraTabs = it.findViewById(R.id.cameraTabs)
+
         }
 
         val adapter = CameraViewPagerAdapter(childFragmentManager)
-        adapter.addFragment(CameraCheckPersonFragment(), "ตรวจสอบบุคคล")
-        adapter.addFragment(CameraCheckALPRFragment(), "ตรวจสอบยานพาหนะ")
+        adapter.addFragment(CameraCheckPersonFragment(), "บุุคคล")
+        adapter.addFragment(CameraCheckALPRFragment(), "ยานพาหนะ")
+        adapter.addFragment(CameraCheckOtherFragment(), "สิ่งต้องสงสัย")
 
         cameraViewPager.adapter = adapter
         cameraTabs.setupWithViewPager(cameraViewPager)
@@ -139,11 +125,9 @@ class CameraFragment : Fragment() {
                 }
 
                 override fun onConfigured(session: CameraCaptureSession) {
-                    if (session != null) {
-                        captureSession = session
-                        captureRequestBuilder.set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE)
-                        captureSession.setRepeatingRequest(captureRequestBuilder.build(), null, null)
-                    }
+                    captureSession = session
+                    captureRequestBuilder.set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE)
+                    captureSession.setRepeatingRequest(captureRequestBuilder.build(), null, null)
                 }
 
                 override fun onClosed(session: CameraCaptureSession) {

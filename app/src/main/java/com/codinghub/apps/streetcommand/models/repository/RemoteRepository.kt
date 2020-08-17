@@ -19,6 +19,10 @@ import com.codinghub.apps.streetcommand.models.error.ApiError
 import com.codinghub.apps.streetcommand.models.error.Either
 import com.codinghub.apps.streetcommand.models.login.LoginRequest
 import com.codinghub.apps.streetcommand.models.login.LoginResponse
+import com.codinghub.apps.streetcommand.models.other.IdentifyOtherRequest
+import com.codinghub.apps.streetcommand.models.other.IdentifyOtherResponse
+import com.codinghub.apps.streetcommand.models.person.CheckPersonRequest
+import com.codinghub.apps.streetcommand.models.person.CheckPersonResponse
 import com.codinghub.apps.streetcommand.models.person.IdentifyPersonRequest
 import com.codinghub.apps.streetcommand.models.person.IdentifyPersonResponse
 import com.codinghub.apps.streetcommand.models.userinfo.UserInfoResponse
@@ -90,6 +94,25 @@ object RemoteRepository : Repository {
         return liveData
     }
 
+    override fun checkPerson(request: CheckPersonRequest): LiveData<Either<CheckPersonResponse>> {
+
+        val liveData = MutableLiveData<Either<CheckPersonResponse>>()
+        genericAPI.checkPerson(request).enqueue(object : Callback<CheckPersonResponse> {
+
+            override fun onResponse(call: Call<CheckPersonResponse>, response: Response<CheckPersonResponse>) {
+                if (response.isSuccessful) {
+                    liveData.value = Either.success(response.body())
+                } else {
+                    liveData.value = Either.error(ApiError.CHECKPERSON, null)
+                }
+            }
+            override fun onFailure(call: Call<CheckPersonResponse>, t: Throwable) {
+                liveData.value = Either.error(ApiError.CHECKPERSON, null)
+            }
+        })
+        return liveData
+    }
+
     override fun identifyALPR(request: IdentifyALPRRequest): LiveData<Either<IdentifyALPRResponse>> {
 
         val liveData = MutableLiveData<Either<IdentifyALPRResponse>>()
@@ -123,6 +146,25 @@ object RemoteRepository : Repository {
             }
             override fun onFailure(call: Call<IdentifyPersonResponse>, t: Throwable) {
                 liveData.value = Either.error(ApiError.IDENTIFYPERSON, null)
+            }
+        })
+        return liveData
+    }
+
+    override fun identifyEnvironment(request: IdentifyOtherRequest): LiveData<Either<IdentifyOtherResponse>> {
+
+        val liveData = MutableLiveData<Either<IdentifyOtherResponse>>()
+        genericAPI.identifyEnvironment(request).enqueue(object : Callback<IdentifyOtherResponse> {
+
+            override fun onResponse(call: Call<IdentifyOtherResponse>, response: Response<IdentifyOtherResponse>) {
+                if (response.isSuccessful) {
+                    liveData.value = Either.success(response.body())
+                } else {
+                    liveData.value = Either.error(ApiError.IDENTIFYENVIRONMENT, null)
+                }
+            }
+            override fun onFailure(call: Call<IdentifyOtherResponse>, t: Throwable) {
+                liveData.value = Either.error(ApiError.IDENTIFYENVIRONMENT, null)
             }
         })
         return liveData

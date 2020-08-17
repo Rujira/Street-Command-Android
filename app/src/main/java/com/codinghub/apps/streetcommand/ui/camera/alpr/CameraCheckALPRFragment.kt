@@ -219,19 +219,18 @@ class CameraCheckALPRFragment : Fragment() {
 
     private fun onFoundSuspect(plate: String, province: String, message: String) {
         if (message.toLowerCase(Locale.getDefault()).contains("whitelist")) {
-            Snackbar.make(contentView,"พบในฐานข้อมูล - $plate $province $message", 3000)
+            Snackbar.make(contentView,"พบในฐานข้อมูล - $plate $province $message",  cameraViewModel.getSnackbarsDuration())
                 .setAnchorView(requireActivity().nav_view_bottom)
                 .setBackgroundTint(ContextCompat.getColor(requireContext().applicationContext, R.color.infoColor))
                 .setActionTextColor(ContextCompat.getColor(requireContext().applicationContext, R.color.whiteColor))
                 .show()
 
         } else {
-            Snackbar.make(contentView,"พบประวัติ - $plate $province $message", 3000)
+            Snackbar.make(contentView,"พบประวัติ - $plate $province $message",  cameraViewModel.getSnackbarsDuration())
                 .setAnchorView(requireActivity().nav_view_bottom)
                 .setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.dangerColor))
                 .setActionTextColor(ContextCompat.getColor(requireContext(), R.color.whiteColor))
                 .show()
-
         }
     }
 
@@ -243,7 +242,7 @@ class CameraCheckALPRFragment : Fragment() {
         } else {
             "$plate $province"
         }
-        Snackbar.make(contentView, "ไม่พบประวัติ - $message", 3000)
+        Snackbar.make(contentView, "ไม่พบประวัติ - $message",  cameraViewModel.getSnackbarsDuration())
             .setAnchorView(requireActivity().nav_view_bottom)
             .setBackgroundTint(ContextCompat.getColor(requireActivity().applicationContext, R.color.successColor))
             .setActionTextColor(ContextCompat.getColor(requireActivity().applicationContext, R.color.whiteColor))
